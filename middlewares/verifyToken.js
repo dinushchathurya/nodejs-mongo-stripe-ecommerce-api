@@ -19,7 +19,6 @@ const authenticationVerifier = (req, res, next)=> {
     }
 }
 
-/* access_level_verifier('admin') */
 const accessLevelVerifier = (req, res, next) => {
     authenticationVerifier(req,res, ()=>{
         if(req.user.id === req.params.id || req.user.isAdmin) {
