@@ -2,6 +2,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const api_config = require("../config/api.js");
+
 const AuthController = {
 
     /* create new user */
@@ -44,7 +46,7 @@ const AuthController = {
             const accessToken = jwt.sign({
                 id: user._id,
                 isAdmin: user.isAdmin}, 
-            'JWT_SECRET',
+            api_config.api.jwt_secret,
             { expiresIn: "1d"}
             );
 
