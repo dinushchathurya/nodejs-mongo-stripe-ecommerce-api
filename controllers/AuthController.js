@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const AuthController = {
 
@@ -16,7 +17,7 @@ const AuthController = {
             const user = await newUser.save();
             res.status(201).json({
                 type : 'success',
-                message: "User has been added successfuly",
+                message: "User has been created successfuly",
                 user
             })
         } catch (err) {
@@ -39,11 +40,21 @@ const AuthController = {
                 message: "User not exists or invalid credentials",
             })
         } else {
-            const { password, ...data } =user._doc;
+
+            const accessToken = jwt.sign({
+                id: user._id,
+                isAdmin: user.isAdmin}, 
+            'JWT_SECRET',
+            { expiresIn: "1d"}
+            );
+
+            const { password, ...data } = user._doc;
+
             res.status(200).json({
                 type: "success",
                 message: "Successfully logged",
-                data
+                ...data,
+                accessToken
             })
         }
     }
