@@ -29,4 +29,15 @@ const accessLevelVerifier = (req, res, next) => {
     })
 }
 
-module.exports = { authenticationVerifier, accessLevelVerifier };
+/* access_level_verifier('admin') */
+const isAdminVerifier = (req, res, next) => {
+    authenticationVerifier(req, res, ()=> {
+        if(req.user.isAdmin) {
+            next();
+        } else {
+            res.status(403).json("You are not allowed to perform this task")
+        }
+    })
+}
+
+module.exports = { authenticationVerifier, accessLevelVerifier, isAdminVerifier };
