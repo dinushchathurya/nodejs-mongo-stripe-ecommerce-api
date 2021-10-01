@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const AuthController = {
 
+    /* create new user */
     async create_user(req, res, next) {
 
         const newUser = new User({
@@ -26,6 +27,26 @@ const AuthController = {
             })
         }
     },
+
+    /* login existing user */
+    async login_user(req, res) {
+        
+        const user = await User.findOne({ username: req.body.username });
+
+        if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
+            res.status(500).json({
+                type: "error",
+                message: "User not exists or invalid credentials",
+            })
+        } else {
+
+            res.status(200).json({
+                type: "success",
+                message: "Successfully logged",
+                user
+            })
+        }
+    }
 };
 
 module.exports = AuthController;

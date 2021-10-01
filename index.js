@@ -1,15 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-const { user_route } = require('./routes');
+/* configure body-parser */
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/api/v1/user', user_route);
+const { user_route, auth_route } = require('./routes');
+
+app.use('/api/v1/auth', auth_route);
+app.use('/api/v1/users', user_route);
 
 const dbConfig = require('./config/database-config');
 
-// Connecting to the database
+/* connecting to the database */
 mongoose.connect(dbConfig.URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -21,7 +27,7 @@ mongoose.connect(dbConfig.URI, {
     process.exit();
 });
 
-// listen for requests
+/* listen for requests */
 app.listen(3000, () => {
     console.log("Server is listening on port 3000");
 });
