@@ -39,11 +39,11 @@ const AuthController = {
                 message: "User not exists or invalid credentials",
             })
         } else {
-
+            const { password, ...data } =user._doc;
             res.status(200).json({
                 type: "success",
                 message: "Successfully logged",
-                user
+                data
             })
         }
     }
