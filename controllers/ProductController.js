@@ -24,7 +24,7 @@ const ProductController = {
         try {
             const product = await Product.findById(req.params.id);
             if(!product) {
-                res.status(200).json({
+                res.status(404).json({
                     type: "error",
                     message: "Product doesn't exists"
                 })
@@ -59,6 +59,61 @@ const ProductController = {
                 message: "Something went wrong please try again",
                 err
             })
+        }
+    },
+
+    /* update product */
+    async update_product(req, res) {
+        const existing = await Product.findById(req.params.id);
+        if(!existing){
+            res.status(404).json({
+                type: "error",
+                message: "Product doesn't exists"
+            })
+        } else {
+            try {
+                const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
+                    $set: req.body
+                },
+                    { new: true }
+                );
+                res.status(200).json({
+                    type: "success",
+                    message: "Product updated successfully",
+                    updatedProduct
+                })
+            } catch (err) {
+                res.status(500).json({
+                    type: "error",
+                    message: "Something went wrong please try again",
+                    err
+                })
+            }
+        }
+    },
+
+    /* delete product */
+    async delete_user(req, res) {
+        const existing = await Product.findById(req.params.id);
+        if (!existing) {
+            res.status(200).json({
+                type: "error",
+                message: "Product doesn't exists"
+            })
+        } else {
+            try {
+                await Product.findOneAndDelete(req.params.id);
+                res.status(200).json({
+                    type: "success",
+                    message: "Product has been deleted successfully"
+                });
+            } catch (err) {
+                res.status(500).json({
+                    type: "error",
+                    message: "Something went wrong please try again",
+                    err
+                })
+            }
         }
     }
 };
