@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 
 const app = express();
 
+const { user_route } = require('./routes');
+
+app.use('/api/v1/user', user_route);
+
 const dbConfig = require('./config/database-config');
 
 // Connecting to the database
