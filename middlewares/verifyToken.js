@@ -19,6 +19,7 @@ const authenticationVerifier = (req, res, next)=> {
     }
 }
 
+/* check if the current user */
 const accessLevelVerifier = (req, res, next) => {
     authenticationVerifier(req,res, ()=>{
         if(req.user.id === req.params.id || req.user.isAdmin) {
